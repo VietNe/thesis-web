@@ -1,0 +1,34 @@
+<nb-card>
+  <nb-card-header>
+    <div>
+      <div class="h4">
+        {{ station.name }}
+      </div>
+      <div>
+        ID:
+        <b>
+          {{ station.id }}
+        </b>
+      </div>
+      <div>
+        Area:
+        <b>
+          {{ station.area }}
+        </b>
+      </div>
+      <div>
+        Status:
+        <span
+          class="badge"
+          [class]="station.status ? 'badge-success' : 'badge-danger'"
+        >
+          {{ station.status ? "Active" : "Inactive" }}
+        </span>
+      </div>
+    </div>
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
