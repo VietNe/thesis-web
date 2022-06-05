@@ -1,22 +1,21 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { StationComponent } from "./station.component";
-import { StationRoutingModule } from "./station-routing.module";
+import { NgModule } from "@angular/core";
 import {
   NbCardModule,
-  NbTreeGridModule,
   NbIconModule,
   NbInputModule,
+  NbTreeGridModule,
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ThemeModule } from "../../@theme/theme.module";
+import { StationRoutingModule } from "./station-routing.module";
+import { StationComponent } from "./station.component";
 
 @NgModule({
   declarations: [StationComponent],
   imports: [
     CommonModule,
     StationRoutingModule,
-    CommonModule,
     NbCardModule,
     NbTreeGridModule,
     NbIconModule,
