@@ -7,29 +7,27 @@
         <div class="col-lg-5 col-12 mh-100 p-5">
           <nb-card>
             <nb-card-body>
-              <form>
+              <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                  <label for="exampleInputEmail1" class="label"
-                    >Email address</label
-                  >
+                  <label for="email" class="label">Email address</label>
                   <input
                     type="email"
                     nbInput
                     fullWidth
-                    id="exampleInputEmail1"
+                    id="email"
                     placeholder="Email"
+                    formControlName="email"
                   />
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputPassword1" class="label"
-                    >Password</label
-                  >
+                  <label for="password" class="label">Password</label>
                   <input
                     type="password"
                     nbInput
                     fullWidth
-                    id="exampleInputPassword1"
+                    id="password"
                     placeholder="Password"
+                    formControlName="password"
                   />
                 </div>
 

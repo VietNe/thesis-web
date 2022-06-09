@@ -34,7 +34,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = "cosmic";
 
-  userMenu = [{ icon: "log-out-outline", title: "Log out" }];
+  userMenu = [
+    { icon: "log-out-outline", title: "My profile" },
+    { icon: "log-out-outline", title: "Log out" },
+  ];
 
   constructor(
     private sidebarService: NbSidebarService,
@@ -48,10 +51,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService
-      .getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => (this.user = users.nick));
+    this.user = JSON.parse(localStorage.getItem("user"));
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
