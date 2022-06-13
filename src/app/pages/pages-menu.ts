@@ -8,8 +8,18 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: "Manage Monitoring Stations",
+    title: "Manage Stations",
     icon: "radio-outline",
+    link: "/pages/stations",
+  },
+  {
+    title: "Manage Station",
+    icon: "radio-outline",
+    link: "/pages/stations",
+  },
+  {
+    title: "Manage Users",
+    icon: "people-outline",
     link: "/pages/stations",
   },
   {
@@ -17,28 +27,4 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: "info-outline",
     link: "/pages/iot-dashboard",
   },
-  // {
-  //   title: "Maps",
-  //   icon: "map-outline",
-  //   children: [
-  //     {
-  //       title: "Leaflet Maps",
-  //       link: "/pages/maps/leaflet",
-  //     },
-  //     {
-  //       title: "Bubble Maps",
-  //       link: "/pages/maps/bubble",
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: "Charts",
-  //   icon: "pie-chart-outline",
-  //   children: [
-  //     {
-  //       title: "Echarts",
-  //       link: "/pages/charts/echarts",
-  //     },
-  //   ],
-  // },
 ];

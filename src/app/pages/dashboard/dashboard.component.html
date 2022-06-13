@@ -1,19 +1,41 @@
 <div class="row">
-  <div class="col-xxl-9">
-    <ngx-country-orders></ngx-country-orders>
-  </div>
-
-  <div class="col-xxl-3">
-    <ngx-progress-section></ngx-progress-section>
-  </div>
+  <div class="col-6"></div>
+  <div class="col-6"></div>
 </div>
 
 <div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
-    <ngx-weather></ngx-weather>
-  </div>
+    <!-- Stations -->
+    <nb-card>
+      <div class="icon-container">
+        <div class="icon status-success">
+          <nb-icon icon="home-outline"></nb-icon>
+        </div>
+      </div>
 
+      <div class="details">
+        <div class="title h5">Stations</div>
+        <div class="status h6">{{ dashboardData?.stationCount }}</div>
+      </div>
+    </nb-card>
+    <!-- Users -->
+    <nb-card>
+      <div class="icon-container">
+        <div class="icon status-warning">
+          <nb-icon icon="people-outline"></nb-icon>
+        </div>
+      </div>
+
+      <div class="details">
+        <div class="title h5">Users</div>
+        <div class="status h6">{{ dashboardData?.userCount }}</div>
+      </div>
+    </nb-card>
+    <!-- Station Info - Hour -->
+    <ngx-weather [station]="dashboardData?.station"></ngx-weather>
+  </div>
+  <!-- Station Info - Today -->
   <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
-    <ngx-electricity></ngx-electricity>
+    <ngx-electricity [station]="dashboardData?.station"></ngx-electricity>
   </div>
 </div>

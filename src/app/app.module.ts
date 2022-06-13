@@ -14,7 +14,8 @@ import { CoreModule } from "./@core/core.module";
 import { ThemeModule } from "./@theme/theme.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-
+import { NgxSpinnerModule } from "ngx-spinner";
+import { interceptors } from "./interceptors";
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -32,10 +33,11 @@ import { AppComponent } from "./app.component";
       closeButton: true,
     }),
     NbToastrModule.forRoot(),
-
+    NgxSpinnerModule,
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
   ],
+  providers: [...interceptors],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

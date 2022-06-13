@@ -1,185 +1,231 @@
-import { delay, takeWhile } from 'rxjs/operators';
-import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
-import { LayoutService } from '../../../../@core/utils';
-import { ElectricityChart } from '../../../../@core/data/electricity';
+import { Component, Input, OnDestroy } from "@angular/core";
+import { takeWhile } from "rxjs/operators";
+import { LayoutService } from "../../../../@core/utils";
+
+var schema = [
+  { name: "date", index: 0, text: "Date" },
+  { name: "AQIindex", index: 1, text: "AQI Index" },
+  { name: "PM10", index: 4, text: "PM1.0" },
+  { name: "PM25", index: 2, text: "PM2.5" },
+  { name: "PM100", index: 3, text: "PM10" },
+  { name: "TEMP", index: 5, text: "TEMP" },
+  { name: "HUM", index: 6, text: "HUM" },
+  { name: "PRES", index: 6, text: "PRES" },
+];
+
+var itemStyle = {
+  backgroundColor: "red",
+  opacity: 0.8,
+  shadowBlur: 10,
+  shadowOffsetX: 0,
+  shadowOffsetY: 0,
+  shadowColor: "rgba(0, 0, 0, 0.5)",
+};
 
 @Component({
-  selector: 'ngx-electricity-chart',
-  styleUrls: ['./electricity-chart.component.scss'],
+  selector: "ngx-electricity-chart",
+  styleUrls: ["./electricity-chart.component.scss"],
   template: `
-    <div echarts
-         [options]="option"
-         [merge]="option"
-         class="echart"
-         (chartInit)="onChartInit($event)">
-    </div>
+    <div
+      echarts
+      [options]="option"
+      [merge]="option"
+      class="echart"
+      (chartInit)="onChartInit($event)"
+    ></div>
   `,
 })
-export class ElectricityChartComponent implements AfterViewInit, OnDestroy {
-
+export class ElectricityChartComponent implements OnDestroy {
   private alive = true;
 
-  @Input() data: ElectricityChart[];
+  @Input() data: StationData[];
 
   option: any;
   echartsIntance: any;
 
-  constructor(private theme: NbThemeService,
-              private layoutService: LayoutService) {
-    this.layoutService.onSafeChangeLayoutSize()
-      .pipe(
-        takeWhile(() => this.alive),
-      )
+  constructor(private layoutService: LayoutService) {
+    this.layoutService
+      .onSafeChangeLayoutSize()
+      .pipe(takeWhile(() => this.alive))
       .subscribe(() => this.resizeChart());
   }
 
-  ngAfterViewInit(): void {
-    this.theme.getJsTheme()
-      .pipe(
-        takeWhile(() => this.alive),
-        delay(1),
-      )
-      .subscribe(config => {
-        const eTheme: any = config.variables.electricity;
-
-        this.option = {
-          grid: {
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 80,
+  ngOnChanges(): void {
+    if (this.data) {
+      this.option = {
+        backgroundColor: "#323259",
+        color: ["#dd4444"],
+        grid: {
+          left: "10%",
+          right: 150,
+          top: "18%",
+          bottom: "10%",
+        },
+        tooltip: {
+          padding: 10,
+          backgroundColor: "#222",
+          borderColor: "#777",
+          borderWidth: 1,
+          formatter: function (obj) {
+            var value = obj.value;
+            return (
+              '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">' +
+              "<span>Hour: </span>" +
+              value[0] +
+              "</div>" +
+              schema[1].text +
+              "：" +
+              value[1] +
+              "<br>" +
+              schema[2].text +
+              "：" +
+              value[2] +
+              "µm<br>" +
+              schema[3].text +
+              "：" +
+              value[3] +
+              "µm<br>" +
+              schema[4].text +
+              "：" +
+              value[4] +
+              "µm<br>" +
+              schema[5].text +
+              "：" +
+              value[5] +
+              "&deg<br>" +
+              schema[6].text +
+              "：" +
+              value[6] +
+              "%<br>" +
+              schema[7].text +
+              "：" +
+              value[7] +
+              "pa<br>"
+            );
           },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'line',
-              lineStyle: {
-                color: eTheme.tooltipLineColor,
-                width: eTheme.tooltipLineWidth,
-              },
+        },
+        xAxis: {
+          type: "value",
+          name: "Hour",
+          nameGap: 16,
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 14,
+          },
+          max: 24,
+          splitLine: {
+            show: false,
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#eee",
             },
+          },
+        },
+        yAxis: {
+          type: "value",
+          name: "AQI Index",
+          nameLocation: "end",
+          nameGap: 20,
+          nameTextStyle: {
+            color: "#fff",
+            fontSize: 16,
+            fontWeight: "bold",
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#eee",
+            },
+          },
+          splitLine: {
+            show: false,
+          },
+        },
+        visualMap: [
+          {
+            left: "right",
+            top: "10%",
+            dimension: 2,
+            min: 0,
+            max: 250,
+            itemWidth: 30,
+            itemHeight: 120,
+            calculable: true,
+            precision: 0.1,
+            text: ["Size"],
+            textGap: 30,
             textStyle: {
-              color: eTheme.tooltipTextColor,
-              fontSize: 20,
-              fontWeight: eTheme.tooltipFontWeight,
+              color: "#fff",
+              fontWeight: "bold",
             },
-            position: 'top',
-            backgroundColor: eTheme.tooltipBg,
-            borderColor: eTheme.tooltipBorderColor,
-            borderWidth: 1,
-            formatter: '{c0} kWh',
-            extraCssText: eTheme.tooltipExtraCss,
-          },
-          xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            offset: 25,
-            data: this.data.map(i => i.label),
-            axisTick: {
-              show: false,
+            inRange: {
+              symbolSize: [10, 70],
             },
-            axisLabel: {
-              color: eTheme.xAxisTextColor,
-              fontSize: 18,
+            outOfRange: {
+              symbolSize: [10, 70],
+              color: ["rgba(255,255,255,.2)"],
             },
-            axisLine: {
-              lineStyle: {
-                color: eTheme.axisLineColor,
-                width: '2',
+            controller: {
+              inRange: {
+                color: ["#c23531"],
+              },
+              outOfRange: {
+                color: ["#444"],
               },
             },
           },
-          yAxis: {
-            boundaryGap: [0, '5%'],
-            axisLine: {
-              show: false,
-            },
-            axisLabel: {
-              show: false,
-            },
-            axisTick: {
-              show: false,
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                color: eTheme.yAxisSplitLine,
-                width: '1',
-              },
-            },
-          },
-          series: [
-            {
-              type: 'line',
-              smooth: true,
-              symbolSize: 20,
-              itemStyle: {
-                normal: {
-                  opacity: 0,
-                },
-                emphasis: {
-                  color: '#ffffff',
-                  borderColor: eTheme.itemBorderColor,
-                  borderWidth: 2,
-                  opacity: 1,
-                },
-              },
-              lineStyle: {
-                normal: {
-                  width: eTheme.lineWidth,
-                  type: eTheme.lineStyle,
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    offset: 0,
-                    color: eTheme.lineGradFrom,
-                  }, {
-                    offset: 1,
-                    color: eTheme.lineGradTo,
-                  }]),
-                  shadowColor: eTheme.lineShadow,
-                  shadowBlur: 6,
-                  shadowOffsetY: 12,
-                },
-              },
-              areaStyle: {
-                normal: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    offset: 0,
-                    color: eTheme.areaGradFrom,
-                  }, {
-                    offset: 1,
-                    color: eTheme.areaGradTo,
-                  }]),
-                },
-              },
-              data: this.data.map(i => i.value),
-            },
+          {
+            left: "right",
+            bottom: "5%",
+            dimension: 6,
+            min: 0,
+            max: 50,
+            itemHeight: 120,
 
-            {
-              type: 'line',
-              smooth: true,
-              symbol: 'none',
-              lineStyle: {
-                normal: {
-                  width: eTheme.lineWidth,
-                  type: eTheme.lineStyle,
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                    offset: 0,
-                    color: eTheme.lineGradFrom,
-                  }, {
-                    offset: 1,
-                    color: eTheme.lineGradTo,
-                  }]),
-                  shadowColor: eTheme.shadowLineDarkBg,
-                  shadowBlur: 14,
-                  opacity: 1,
-                },
-              },
-              data: this.data.map(i => i.value),
+            precision: 0.1,
+            text: [""],
+            textGap: 30,
+            textStyle: {
+              color: "#fff",
             },
-          ],
-        };
-    });
+            inRange: {
+              colorLightness: [1, 0.5],
+            },
+            outOfRange: {
+              color: ["rgba(255,255,255,.2)"],
+            },
+            controller: {
+              inRange: {
+                color: ["#c23531"],
+              },
+              outOfRange: {
+                color: ["#444"],
+              },
+            },
+          },
+        ],
+        series: [
+          {
+            name: "Station Info",
+            type: "scatter",
+            itemStyle: itemStyle,
+            data:
+              this.data?.map((e) => {
+                return [
+                  new Date(e.createdAt).getHours(),
+                  e.AQI,
+                  e.PM10,
+                  e.PM25,
+                  e.PM100,
+                  e.Temp,
+                  e.Hum,
+                  e.Pre,
+                ];
+              }) || [],
+          },
+        ],
+      };
+    }
   }
 
   onChartInit(echarts) {

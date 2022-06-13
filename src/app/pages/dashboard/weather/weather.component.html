@@ -1,41 +1,49 @@
-<nb-card size="medium">
+<nb-card size="small">
   <nb-card-body>
-    <span class="h2 location">Linh Trung, Thủ Đức</span>
-    <span class="date mt-2">Mon 29 May</span>
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="col-8">
+        <span class="h5 location" style="word-wrap: break-word">{{
+          station?.NameDevice
+        }}</span>
+        <span class="date mt-2">{{
+          station?.data[0]?.createdAt | date: "medium"
+        }}</span>
+      </div>
 
-    <div class="today mb-2">
-      <span class="today-temperature h5">AQI: 20</span>
-      <div class="p-3 h6 rounded bg-danger d-flex align-items-center">
-        Medium
+      <div
+        style="max-height: 110px; height: 110px"
+        class="col-4 w-100 ml-3 text-center h2 rounded bg-danger d-flex align-items-center justify-content-center"
+      >
+        {{ station?.currentAQI }}
       </div>
     </div>
 
     <div class="today-details">
       <div class="parameter">
-        <span class="caption parameter-name">max</span>
-        <span class="parameter-value">23&deg;</span>
+        <span class="caption parameter-name">Temp</span>
+        <span class="parameter-value">{{ station?.data[0]?.Temp }}&deg;</span>
       </div>
       <div class="parameter">
-        <span class="caption parameter-name">min</span>
-        <span class="parameter-value">19&deg;</span>
+        <span class="caption parameter-name">Hum</span>
+        <span class="parameter-value">{{ station?.data[0]?.Hum }}%</span>
       </div>
       <div class="parameter">
-        <span class="caption parameter-name">wind</span>
-        <span class="parameter-value">4 km/h</span>
+        <span class="caption parameter-name">Pres</span>
+        <span class="parameter-value">{{ station?.data[0]?.Pre }}pa</span>
       </div>
     </div>
     <div class="today-details">
       <div class="parameter">
-        <span class="caption parameter-name">max</span>
-        <span class="parameter-value">23&deg;</span>
+        <span class="caption parameter-name">PM1.0</span>
+        <span class="parameter-value">{{ station?.data[0]?.PM10 }}µm</span>
       </div>
       <div class="parameter">
-        <span class="caption parameter-name">min</span>
-        <span class="parameter-value">19&deg;</span>
+        <span class="caption parameter-name">PM2.5</span>
+        <span class="parameter-value">{{ station?.data[0]?.PM25 }}µm</span>
       </div>
       <div class="parameter">
-        <span class="caption parameter-name">hum</span>
-        <span class="parameter-value">87%</span>
+        <span class="caption parameter-name">PM10</span>
+        <span class="parameter-value">{{ station?.data[0]?.PM100 }}µm</span>
       </div>
     </div>
   </nb-card-body>
