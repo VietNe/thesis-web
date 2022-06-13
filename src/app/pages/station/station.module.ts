@@ -8,6 +8,7 @@ import {
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ThemeModule } from "../../@theme/theme.module";
+import { DashboardModule } from "../dashboard/dashboard.module";
 import { StationRoutingModule } from "./station-routing.module";
 import { StationComponent } from "./station.component";
 
@@ -22,6 +23,7 @@ import { StationComponent } from "./station.component";
     NbInputModule,
     ThemeModule,
     Ng2SmartTableModule,
+    DashboardModule,
   ],
 })
 export class StationModule {}

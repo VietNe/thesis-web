@@ -8,8 +8,9 @@ import {
 
 import { UserData } from "../../../@core/data/users";
 import { LayoutService } from "../../../@core/utils";
-import { map, takeUntil } from "rxjs/operators";
+import { filter, map, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "ngx-header",
@@ -45,10 +46,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private themeService: NbThemeService,
     private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService
+    private breakpointService: NbMediaBreakpointsService,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    this.menuService
+      .onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === "my-context-menu"),
+        map(({ item: { title } }) => title)
+      )
+      .subscribe((title) => {
+        if (title === "Log out") {
+          localStorage.clear();
+          this.router.navigate([""]);
+        }
+      });
+
     this.currentTheme = this.themeService.currentTheme;
 
     this.user = JSON.parse(localStorage.getItem("user"));

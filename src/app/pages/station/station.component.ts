@@ -143,6 +143,14 @@ export class StationComponent implements OnInit {
         this.station = res.data;
         this.source.load(this.station.data);
       });
+    } else {
+      this.stationService.getStationByNameDevice().subscribe((res) => {
+        this.station = res.data;
+        this.station.data = this.station.data.sort((a, b) =>
+          new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1
+        );
+        this.source.load(this.station.data);
+      });
     }
   }
 

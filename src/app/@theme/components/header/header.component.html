@@ -5,18 +5,26 @@
     </a>
     <a class="logo" href="#" (click)="navigateHome()">AQI <span>Admin</span></a>
   </div>
-  <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
-    <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
+  <nb-select
+    [selected]="currentTheme"
+    (selectedChange)="changeTheme($event)"
+    status="primary"
+  >
+    <nb-option *ngFor="let theme of themes" [value]="theme.value">
+      {{ theme.name }}</nb-option
+    >
   </nb-select>
 </div>
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
-      <nb-user [nbContextMenu]="userMenu"
-               [onlyPicture]="userPictureOnly"
-               [name]="user?.name"
-               >
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user
+        [nbContextMenu]="userMenu"
+        [onlyPicture]="userPictureOnly"
+        [name]="user?.name"
+        nbContextMenuTag="my-context-menu"
+      >
       </nb-user>
     </nb-action>
   </nb-actions>

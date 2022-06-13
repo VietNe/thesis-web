@@ -1,34 +1,82 @@
-<nb-card>
-  <nb-card-header>
-    <div>
-      <div class="h4">
-        {{ station?.NameDevice }}
-      </div>
+<div>
+  <nb-card>
+    <nb-card-header>
       <div>
-        ID:
-        <b>
-          {{ station?._id }}
-        </b>
-      </div>
-      <div>
-        Area:
-        <b>
-          {{ station?.area }}
-        </b>
-      </div>
-      <div>
-        CurrentAQI: {{ station?.currentAQI }}
-        <!-- <span
+        <div class="h4">
+          {{ station?.NameDevice }}
+        </div>
+        <div>
+          ID:
+          <b>
+            {{ station?._id }}
+          </b>
+        </div>
+        <div>
+          Area:
+          <b>
+            {{ station?.area }}
+          </b>
+        </div>
+        <div>
+          Current AQI:
+          <b>
+            {{ station?.currentAQI }}
+          </b>
+          <!-- <span
           class="badge"
           [class]="station.status ? 'badge-success' : 'badge-danger'"
         >
           {{ station.status ? "Active" : "Inactive" }}
         </span> -->
+        </div>
+        <div>
+          Current PM2.5:
+          <b>
+            {{ station?.data[0]?.createdAt | date: "medium" }} -
+            {{ station?.data[0]?.PM25 }} (µm)
+          </b>
+        </div>
+        <div>
+          PM2.5 Next Hour:
+          <b>
+            {{ station?.data[0]?.predictNextHour?.Date | date: "medium" }} -
+            {{ station?.data[0]?.predictNextHour?.value }} (µm)
+          </b>
+        </div>
       </div>
-    </div>
-  </nb-card-header>
+    </nb-card-header>
 
-  <nb-card-body>
-    <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
-  </nb-card-body>
-</nb-card>
+    <nb-card-body>
+      <ng2-smart-table [settings]="settings" [source]="source">
+      </ng2-smart-table>
+    </nb-card-body>
+  </nb-card>
+  <!-- Daily Report -->
+  <nb-card size="large">
+    <nb-card-header>
+      <div>
+        <div class="h4">Daily Report</div>
+        <div>
+          ID:
+          <b>
+            {{ station?._id }}
+          </b>
+        </div>
+      </div>
+    </nb-card-header>
+
+    <nb-card-body>
+      <ngx-electricity-chart [data]="station?.data"></ngx-electricity-chart>
+    </nb-card-body>
+  </nb-card>
+  <!-- General Report -->
+  <nb-card size="large">
+    <nb-card-header>
+      <div class="h4">General Report</div>
+    </nb-card-header>
+
+    <nb-card-body>
+      <ngx-general-chart [data]="station?.data"></ngx-general-chart>
+    </nb-card-body>
+  </nb-card>
+</div>

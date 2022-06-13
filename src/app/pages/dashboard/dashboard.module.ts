@@ -19,6 +19,7 @@ import { ThemeModule } from "../../@theme/theme.module";
 import { DashboardComponent } from "./dashboard.component";
 import { ElectricityChartComponent } from "./electricity/electricity-chart/electricity-chart.component";
 import { ElectricityComponent } from "./electricity/electricity.component";
+import { GeneralChartComponent } from "./electricity/general-chart/general-chart.component";
 import { WeatherComponent } from "./weather/weather.component";
 
 @NgModule({
@@ -44,8 +45,10 @@ import { WeatherComponent } from "./weather/weather.component";
     DashboardComponent,
     ElectricityComponent,
     ElectricityChartComponent,
+    GeneralChartComponent,
     WeatherComponent,
   ],
+  exports: [ElectricityChartComponent, GeneralChartComponent],
   providers: [],
 })
 export class DashboardModule {}
