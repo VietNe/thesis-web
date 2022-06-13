@@ -20,7 +20,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   {
     title: "About",
     icon: "info-outline",
-    link: "/pages/iot-dashboard",
+    link: "/pages/about",
   },
 ];
 export const USER_MENU_ITEMS: NbMenuItem[] = [
