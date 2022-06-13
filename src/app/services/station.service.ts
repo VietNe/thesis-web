@@ -24,4 +24,7 @@ export class StationService extends BaseService {
   public getAllStation(): Observable<any> {
     return this.get(`${this.stationsEndpoint}`);
   }
+  public getStationById(id: string): Observable<any> {
+    return this.get(`${this.stationsEndpoint}/${id}`);
+  }
 }

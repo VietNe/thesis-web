@@ -1,6 +1,8 @@
 import { DatePipe } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { ViewCell, LocalDataSource } from "ng2-smart-table";
+import { StationService } from "../../services/station.service";
 
 @Component({
   template: `
@@ -37,6 +39,24 @@ class CreatedAtComponent implements ViewCell, OnInit {
     this.date = this.datePipe.transform(this.value);
   }
 }
+@Component({
+  template: `
+    <div>
+      {{ val }}
+    </div>
+  `,
+})
+class PredictNextHourComponent implements ViewCell, OnInit {
+  public val: number;
+  @Input() value: string | number;
+  @Input() rowData: any;
+
+  constructor() {}
+
+  ngOnInit() {
+    this.val = this.rowData?.predictNextHour?.value;
+  }
+}
 
 @Component({
   selector: "ngx-station",
@@ -44,41 +64,7 @@ class CreatedAtComponent implements ViewCell, OnInit {
   styleUrls: ["./station.component.scss"],
 })
 export class StationComponent implements OnInit {
-  public station: any = {
-    id: 1,
-    name: "Trạm Linh Trung",
-    area: "Thủ Đức",
-    status: true,
-    stationData: [
-      {
-        o2: 1,
-        pres: 1,
-        temperature: 1,
-        humidity: 1,
-        pm25: 1,
-        pm100: 1,
-        createdAt: Date.now(),
-      },
-      {
-        o2: 1,
-        pres: 1,
-        temperature: 1,
-        humidity: 1,
-        pm25: 1,
-        pm100: 1,
-        createdAt: Date.now(),
-      },
-      {
-        o2: 1,
-        pres: 1,
-        temperature: 1,
-        humidity: 1,
-        pm25: 1,
-        pm100: 1,
-        createdAt: Date.now(),
-      },
-    ],
-  };
+  public station: Station;
 
   settings = {
     actions: {
@@ -92,33 +78,49 @@ export class StationComponent implements OnInit {
     filter: false,
     hideSubHeader: true,
     columns: {
-      o2: {
+      AQI: {
+        title: "AQI",
+        type: "number",
+      },
+      O2: {
         title: "O2 (ppm)",
         type: "number",
       },
-      pres: {
+      Pre: {
         filter: false,
         title: "PRES (pa)",
         type: "number",
       },
-      temperature: {
+      Temp: {
         filter: false,
-        title: "TEM (%)",
+        title: "TEM (°C)",
         type: "number",
       },
-      humidity: {
+      Hum: {
         filter: false,
         title: "HUM (%)",
         type: "number",
       },
-      pm25: {
+
+      PM10: {
         filter: false,
-        title: "PM2.5",
+        title: "PM1.0 (µm)",
         type: "number",
       },
-      pm100: {
+      PM25: {
         filter: false,
-        title: "PM10",
+        title: "PM2.5 (µm)",
+        type: "number",
+      },
+      predictNextHour: {
+        filter: false,
+        title: "PM2.5 Next Hour (µm)",
+        type: "custom",
+        renderComponent: PredictNextHourComponent,
+      },
+      PM100: {
+        filter: false,
+        title: "PM10 (µm)",
         type: "number",
       },
       createdAt: {
@@ -131,9 +133,17 @@ export class StationComponent implements OnInit {
   };
 
   source: LocalDataSource = new LocalDataSource();
-  constructor() {
-    const data = this.station.stationData;
-    this.source.load(data);
+  constructor(
+    private stationService: StationService,
+    private route: ActivatedRoute
+  ) {
+    const { id } = this.route.snapshot.params;
+    if (id) {
+      this.stationService.getStationById(id).subscribe((res) => {
+        this.station = res.data;
+        this.source.load(this.station.data);
+      });
+    }
   }
 
   ngOnInit(): void {}

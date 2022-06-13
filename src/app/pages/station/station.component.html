@@ -2,28 +2,28 @@
   <nb-card-header>
     <div>
       <div class="h4">
-        {{ station.name }}
+        {{ station?.NameDevice }}
       </div>
       <div>
         ID:
         <b>
-          {{ station.id }}
+          {{ station?._id }}
         </b>
       </div>
       <div>
         Area:
         <b>
-          {{ station.area }}
+          {{ station?.area }}
         </b>
       </div>
       <div>
-        Status:
-        <span
+        CurrentAQI: {{ station?.currentAQI }}
+        <!-- <span
           class="badge"
           [class]="station.status ? 'badge-success' : 'badge-danger'"
         >
           {{ station.status ? "Active" : "Inactive" }}
-        </span>
+        </span> -->
       </div>
     </div>
   </nb-card-header>
