@@ -18,7 +18,10 @@ export class StationService extends BaseService {
     super(http, toastService);
   }
 
-  public getDashboard(): Observable<LoginResponse> {
+  public getDashboard(): Observable<any> {
     return this.get(`${this.stationsEndpoint}/dashboard`);
+  }
+  public getAllStation(): Observable<any> {
+    return this.get(`${this.stationsEndpoint}`);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { LocalDataSource, ViewCell } from "ng2-smart-table";
-import { SmartTableData } from "../../@core/data/smart-table";
+import { StationService } from "../../services/station.service";
 
 @Component({
   template: `
@@ -36,11 +36,7 @@ export class StationsComponent implements OnInit {
       perPage: 6,
     },
     columns: {
-      id: {
-        title: "ID",
-        type: "number",
-      },
-      stationName: {
+      NameDevice: {
         title: "Station Name",
         type: "string",
       },
@@ -48,26 +44,27 @@ export class StationsComponent implements OnInit {
         title: "Area",
         type: "string",
       },
-      status: {
-        title: "Status",
-        type: "custom",
-        filter: false,
-        renderComponent: StatusComponent,
+      currentAQI: {
+        title: "Current AQI",
+        type: "number",
       },
     },
   };
 
   source: LocalDataSource = new LocalDataSource();
-
-  constructor(private service: SmartTableData, private router: Router) {
-    const data = this.service.getData();
-    this.source.load(data);
+  private stations: Station[];
+  constructor(private stationService: StationService, private router: Router) {
+    this.stationService.getAllStation().subscribe((res) => {
+      this.stations = res.data;
+      this.source.load(this.stations);
+    });
   }
 
   ngOnInit(): void {}
 
   public onRowSelect(event: any): void {
-    const { id } = event?.data;
-    if (id) this.router.navigate(["pages", "stations", id]);
+    const { NameDevice } = event?.data;
+    const station = this.stations.find((s) => s.NameDevice === NameDevice);
+    if (station) this.router.navigate(["pages", "stations", station._id]);
   }
 }
