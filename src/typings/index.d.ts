@@ -48,3 +48,11 @@ interface Station {
   predicts: any[];
   area: string;
 }
+
+interface User {
+  address: string;
+  email: string;
+  phone: string;
+  name: string;
+  role: string;
+}

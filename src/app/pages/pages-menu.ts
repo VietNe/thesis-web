@@ -15,7 +15,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   {
     title: "Manage Users",
     icon: "people-outline",
-    link: "/pages/stations",
+    link: "/pages/users",
   },
   {
     title: "About",

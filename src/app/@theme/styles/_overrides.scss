@@ -1,4 +1,4 @@
-@import './themes';
+@import "./themes";
 
 @mixin nb-overrides() {
   nb-select.size-medium button {
@@ -7,5 +7,14 @@
     nb-icon {
       right: 0.41rem !important;
     }
+  }
+
+  ng2-smart-table th.ng2-smart-actions-title-add a {
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+  }
+  ng2-smart-table .ng2-smart-actions a.ng2-smart-action {
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
   }
 }
