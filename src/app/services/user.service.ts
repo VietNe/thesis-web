@@ -29,4 +29,12 @@ export class UserService extends BaseService {
   public updateProfile(body: any): Observable<any> {
     return this.patch(body, `${this.usersEndpoint}/updateMe`);
   }
+
+  public updateUser(body: any, id: string): Observable<any> {
+    return this.patch(body, `${this.usersEndpoint}/${id}`);
+  }
+
+  public createUser(body: any): Observable<any> {
+    return this.post(body, `${this.usersEndpoint}/admin/signup`);
+  }
 }

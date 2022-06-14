@@ -55,4 +55,5 @@ interface User {
   phone: string;
   name: string;
   role: string;
+  _id: string;
 }

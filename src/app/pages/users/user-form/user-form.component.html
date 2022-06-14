@@ -6,7 +6,7 @@
       </nb-card-header>
 
       <nb-card-body>
-        <form>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="row">
             <div class="col-12 col-lg-6">
               <div class="form-group">
@@ -52,15 +52,13 @@
                   id="role"
                   formControlName="role"
                   placeholder="Role"
-                  style="text-transform: uppercase"
                 />
               </div>
             </div>
             <div class="col-12 col-lg-6">
-              <div class="form-group">
+              <div class="form-group" *ngIf="!isUpdate">
                 <label for="email" class="label">Email address</label>
                 <input
-                  [disabled]="isUpdate"
                   type="email"
                   nbInput
                   fullWidth

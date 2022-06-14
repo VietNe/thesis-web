@@ -41,6 +41,7 @@ export class ActionsComponent implements ViewCell, OnInit {
     this.dialogService.open(UserFormComponent, {
       context: {
         isUpdate: true,
+        user: this.rowData,
       },
     });
   }
@@ -75,10 +76,6 @@ export class UsersComponent implements OnInit {
       },
       email: {
         title: "Email",
-        type: "string",
-      },
-      area: {
-        title: "Area",
         type: "string",
       },
       NameDevice: {

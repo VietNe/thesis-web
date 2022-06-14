@@ -16,6 +16,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { interceptors } from "./interceptors";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -36,6 +37,8 @@ import { interceptors } from "./interceptors";
     NgxSpinnerModule,
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [...interceptors],
   bootstrap: [AppComponent],

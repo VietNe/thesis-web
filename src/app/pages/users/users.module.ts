@@ -12,6 +12,7 @@ import {
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ThemeModule } from "../../@theme/theme.module";
 import { UserFormComponent } from './user-form/user-form.component';
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
   {
@@ -25,6 +26,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule,
+    ReactiveFormsModule,
     NbCardModule,
     NbTreeGridModule,
     NbIconModule,
