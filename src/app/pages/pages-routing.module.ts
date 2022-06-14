@@ -44,6 +44,11 @@ const routes: Routes = [
           import("./station/station.module").then((m) => m.StationModule),
       },
       {
+        path: "profile",
+        loadChildren: () =>
+          import("./profile/profile.module").then((m) => m.ProfileModule),
+      },
+      {
         path: "",
         redirectTo: "dashboard",
       },

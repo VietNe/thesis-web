@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth.service";
+import { LocalStorageService } from "../../services/local-storage.service";
 import { ToastService } from "../../services/toast.service";
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private toastService: ToastService,
+    private localStorageService: LocalStorageService,
     private router: Router
   ) {
     const token = localStorage.getItem("token");
@@ -48,7 +50,8 @@ export class LoginComponent implements OnInit {
       if (res) {
         this.toastService.success("Đăng nhập thành công!");
         localStorage.setItem("token", res.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
+        // localStorage.setItem("user", JSON.stringify(res.data.user));
+        this.localStorageService.user = JSON.stringify(res.data.user);
         this.router.navigate(["/pages/dashboard"]);
       }
     });

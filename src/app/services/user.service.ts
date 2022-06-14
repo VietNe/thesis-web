@@ -21,4 +21,12 @@ export class UserService extends BaseService {
   public getAllUsers(): Observable<any> {
     return this.get(`${this.usersEndpoint}`);
   }
+
+  public getProfile(): Observable<any> {
+    return this.get(`${this.usersEndpoint}/me`);
+  }
+
+  public updateProfile(body: any): Observable<any> {
+    return this.patch(body, `${this.usersEndpoint}/updateMe`);
+  }
 }

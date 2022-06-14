@@ -11,6 +11,7 @@ import { LayoutService } from "../../../@core/utils";
 import { filter, map, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
+import { LocalStorageService } from "../../../services/local-storage.service";
 
 @Component({
   selector: "ngx-header",
@@ -21,7 +22,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-
   themes = [
     {
       value: "corporate",
@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = "cosmic";
 
   userMenu = [
-    { icon: "log-out-outline", title: "My profile" },
+    { icon: "person-outline", title: "My profile", link: "/pages/profile" },
     { icon: "log-out-outline", title: "Log out" },
   ];
 
@@ -47,8 +47,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserData,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
+    private localStorageService: LocalStorageService,
     private router: Router
-  ) {}
+  ) {
+    this.localStorageService.userValue.subscribe((val) => {
+      this.user = JSON.parse(val);
+    });
+  }
 
   ngOnInit() {
     this.menuService
@@ -67,7 +72,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
 
     this.user = JSON.parse(localStorage.getItem("user"));
-
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService
       .onMediaQueryChange()
