@@ -1,8 +1,9 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { UsersComponent } from "./users.component";
+import { ActionsComponent, UsersComponent } from "./users.component";
 import { Routes, RouterModule } from "@angular/router";
 import {
+  NbButtonModule,
   NbCardModule,
   NbIconModule,
   NbInputModule,
@@ -10,6 +11,7 @@ import {
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ThemeModule } from "../../@theme/theme.module";
+import { UserFormComponent } from './user-form/user-form.component';
 
 const routes: Routes = [
   {
@@ -19,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [UsersComponent],
+  declarations: [UsersComponent, ActionsComponent, UserFormComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -27,6 +29,7 @@ const routes: Routes = [
     NbTreeGridModule,
     NbIconModule,
     NbInputModule,
+    NbButtonModule,
     ThemeModule,
     Ng2SmartTableModule,
   ],

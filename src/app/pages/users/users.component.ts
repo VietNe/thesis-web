@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
+import { NbDialogService } from "@nebular/theme";
 import { LocalDataSource, ViewCell } from "ng2-smart-table";
-import { StationService } from "../../services/station.service";
 import { UserService } from "../../services/user.service";
+import { UserFormComponent } from "./user-form/user-form.component";
 
 @Component({
   template: `
@@ -20,6 +21,30 @@ class RoleComponent implements ViewCell, OnInit {
 
   ngOnInit() {}
 }
+
+@Component({
+  template: `
+    <button size="small" nbButton status="primary" (click)="editUser()">
+      Edit
+    </button>
+  `,
+})
+export class ActionsComponent implements ViewCell, OnInit {
+  @Input() value: string | number;
+  @Input() rowData: any;
+
+  constructor(private dialogService: NbDialogService) {}
+
+  ngOnInit() {}
+
+  editUser() {
+    this.dialogService.open(UserFormComponent, {
+      context: {
+        isUpdate: true,
+      },
+    });
+  }
+}
 @Component({
   selector: "ngx-users",
   templateUrl: "./users.component.html",
@@ -32,14 +57,18 @@ export class UsersComponent implements OnInit {
       edit: false,
       delete: false,
     },
-    add: {
-      addButtonContent: "New",
-      inputClass: "ccustom",
-    },
+
     pager: {
       perPage: 6,
     },
     columns: {
+      _id: {
+        title: "Actions",
+        type: "custom",
+        renderComponent: ActionsComponent,
+        filter: false,
+        width: "70px",
+      },
       name: {
         title: "Name",
         type: "string",
@@ -52,6 +81,18 @@ export class UsersComponent implements OnInit {
         title: "Area",
         type: "string",
       },
+      NameDevice: {
+        title: "Name Device",
+        type: "string",
+      },
+      phone: {
+        title: "Phone",
+        type: "string",
+      },
+      address: {
+        title: "Address",
+        type: "string",
+      },
       role: {
         title: "Role",
         type: "custom",
@@ -62,7 +103,11 @@ export class UsersComponent implements OnInit {
 
   source: LocalDataSource = new LocalDataSource();
   private users: User[];
-  constructor(private userService: UserService, private router: Router) {
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    private dialogService: NbDialogService
+  ) {
     this.userService.getAllUsers().subscribe((res) => {
       this.users = res.data;
       this.source.load(this.users);
@@ -70,4 +115,8 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  createNewUser() {
+    this.dialogService.open(UserFormComponent);
+  }
 }

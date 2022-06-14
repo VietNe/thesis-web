@@ -1,6 +1,11 @@
 <nb-card>
   <nb-card-header>
-    <div class="h5">Users</div>
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="h5">Users</div>
+      <button nbButton status="primary" (click)="createNewUser()">
+        Create New
+      </button>
+    </div>
   </nb-card-header>
 
   <nb-card-body>
