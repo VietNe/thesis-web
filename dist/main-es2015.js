@@ -3880,7 +3880,8 @@ __webpack_require__.r(__webpack_exports__);
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 const environment = {
     production: false,
-    API_URL: "http://localhost:8000/api/v1",
+    // API_URL: "http://localhost:8000/api/v1",
+    API_URL: "http://35.186.156.123:30401/api/v1",
 };
 
 
