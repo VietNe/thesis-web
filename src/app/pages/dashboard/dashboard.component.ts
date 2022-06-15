@@ -2,6 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { NbThemeService } from "@nebular/theme";
 import { takeWhile } from "rxjs/operators";
 import { SolarData } from "../../@core/data/solar";
+import { AQI_COLORS } from "../../constants/colors";
 import { StationService } from "../../services/station.service";
 
 interface CardSettings {
@@ -17,6 +18,7 @@ interface CardSettings {
 })
 export class DashboardComponent implements OnDestroy {
   public dashboardData: DashboardData;
+  colors = AQI_COLORS;
   constructor(private stationService: StationService) {
     this.stationService.getDashboard().subscribe((res) => {
       this.dashboardData = res.data;

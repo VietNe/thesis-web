@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
   private login(): void {
     this.authService.login(this.form.value).subscribe((res: LoginResponse) => {
       if (res) {
-        this.toastService.success("Đăng nhập thành công!");
+        this.toastService.success("Login successful!");
         localStorage.setItem("token", res.token);
         // localStorage.setItem("user", JSON.stringify(res.data.user));
         this.localStorageService.user = JSON.stringify(res.data.user);

@@ -12,7 +12,8 @@
 
       <div
         style="max-height: 110px; height: 110px"
-        class="col-4 w-100 ml-3 text-center h2 rounded bg-danger d-flex align-items-center justify-content-center"
+        [style]="{ backgroundColor: aqi_color }"
+        class="col-4 w-100 ml-3 text-center h2 rounded d-flex align-items-center justify-content-center"
       >
         {{ station?.currentAQI }}
       </div>

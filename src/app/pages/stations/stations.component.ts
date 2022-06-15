@@ -1,16 +1,17 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { LocalDataSource, ViewCell } from "ng2-smart-table";
+import { AQI_COLORS } from "../../constants/colors";
 import { StationService } from "../../services/station.service";
 
 @Component({
   template: `
-    <div class="badge" [class]="status ? 'badge-success' : 'badge-danger'">
-      {{ status ? "Active" : "Inactive" }}
+    <div class="badge" [style.backgroundColor]="aqiColor">
+      {{ value }}
     </div>
   `,
 })
-class StatusComponent implements ViewCell, OnInit {
+class AQIComponent implements ViewCell, OnInit {
   status: boolean;
 
   @Input() value: string | number;
@@ -18,6 +19,14 @@ class StatusComponent implements ViewCell, OnInit {
 
   ngOnInit() {
     this.status = this.rowData?.status;
+  }
+
+  get aqiColor() {
+    const e = AQI_COLORS.find((e) =>
+      this.value > e.gt && e.lte ? this.value <= e.lte : true
+    );
+    if (e) return e.color;
+    return "#FD0100";
   }
 }
 @Component({
@@ -45,8 +54,10 @@ export class StationsComponent implements OnInit {
         type: "string",
       },
       currentAQI: {
+        width: "160px",
         title: "Current AQI",
-        type: "number",
+        type: "custom",
+        renderComponent: AQIComponent,
       },
     },
   };

@@ -1,9 +1,4 @@
 <div class="row">
-  <div class="col-6"></div>
-  <div class="col-6"></div>
-</div>
-
-<div class="row">
   <div class="col-xxxl-3 col-xxl-4 col-lg-5 col-md-6">
     <!-- Stations -->
     <nb-card>
@@ -39,5 +34,89 @@
     <ngx-dashboard-chart
       [station]="dashboardData?.station"
     ></ngx-dashboard-chart>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-dark" [style.backgroundColor]="'#323258'">
+      <thead>
+        <tr>
+          <th scope="col" style="width: 100px">AQI</th>
+          <th scope="col">Air Pollution Level</th>
+          <th scope="col">Health Implications</th>
+          <th scope="col">Cautionary Statement (for PM2.5)</th>
+        </tr>
+      </thead>
+      <tbody style="color: #323258">
+        <tr [style.backgroundColor]="colors[0].color">
+          <th scope="row">0 - 50</th>
+          <td>Good</td>
+          <td>
+            Air quality is considered satisfactory, and air pollution poses
+            little or no risk
+          </td>
+          <td>None</td>
+        </tr>
+        <tr [style.backgroundColor]="colors[1].color">
+          <th scope="row">51 - 100</th>
+          <td>Moderate</td>
+          <td>
+            Air quality is acceptable; however, for some pollutants there may be
+            a moderate health concern for a very small number of people who are
+            unusually sensitive to air pollution.
+          </td>
+          <td>
+            Active children and adults, and people with respiratory disease,
+            such as asthma, should limit prolonged outdoor exertion.
+          </td>
+        </tr>
+        <tr [style.backgroundColor]="colors[2].color">
+          <th scope="row">101 - 150</th>
+          <td>Unhealthy for Sensitive Groupsry</td>
+          <td>
+            Members of sensitive groups may experience health effects. The
+            general public is not likely to be affected.
+          </td>
+          <td>
+            Active children and adults, and people with respiratory disease,
+            such as asthma, should limit prolonged outdoor exertion.
+          </td>
+        </tr>
+        <tr [style.backgroundColor]="colors[3].color" style="color: #fff">
+          <th scope="row">151 - 200</th>
+          <td>Unhealthy</td>
+          <td>
+            Everyone may begin to experience health effects; members of
+            sensitive groups may experience more serious health effects
+          </td>
+          <td>
+            Active children and adults, and people with respiratory disease,
+            such as asthma, should avoid prolonged outdoor exertion; everyone
+            else, especially children, should limit prolonged outdoor exertion
+          </td>
+        </tr>
+        <tr [style.backgroundColor]="colors[4].color" style="color: #fff">
+          <th scope="row">201 - 300</th>
+          <td>Very Unhealthy</td>
+          <td>
+            Health warnings of emergency conditions. The entire population is
+            more likely to be affected.
+          </td>
+          <td>
+            Active children and adults, and people with respiratory disease,
+            such as asthma, should avoid all outdoor exertion; everyone else,
+            especially children, should limit outdoor exertion.
+          </td>
+        </tr>
+        <tr [style.backgroundColor]="colors[5].color" style="color: #fff">
+          <th scope="row">300+</th>
+          <td>Hazardous</td>
+          <td>
+            Health alert: everyone may experience more serious health effects
+          </td>
+          <td>Everyone should avoid all outdoor exertion</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

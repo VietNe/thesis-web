@@ -19,9 +19,13 @@
         </div>
         <div>
           Current AQI:
-          <b>
+          <div
+            class="badge"
+            [style.backgroundColor]="aqiColor(station?.currentAQI)"
+          >
             {{ station?.currentAQI }}
-          </b>
+          </div>
+
           <!-- <span
           class="badge"
           [class]="station.status ? 'badge-success' : 'badge-danger'"
@@ -31,17 +35,25 @@
         </div>
         <div>
           Current PM2.5:
-          <b>
+          <div
+            class="badge"
+            [style.backgroundColor]="aqiColor(station?.data[0]?.PM25)"
+          >
             {{ station?.data[0]?.createdAt | date: "medium" }} -
             {{ station?.data[0]?.PM25 }} (µm)
-          </b>
+          </div>
         </div>
         <div>
           PM2.5 Next Hour:
-          <b>
+          <div
+            class="badge"
+            [style.backgroundColor]="
+              aqiColor(station?.data[0]?.predictNextHour?.value)
+            "
+          >
             {{ station?.data[0]?.predictNextHour?.Date | date: "medium" }} -
             {{ station?.data[0]?.predictNextHour?.value }} (µm)
-          </b>
+          </div>
         </div>
       </div>
     </nb-card-header>

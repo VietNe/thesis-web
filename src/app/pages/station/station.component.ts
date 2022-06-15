@@ -4,6 +4,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ViewCell, LocalDataSource } from "ng2-smart-table";
 import { StationService } from "../../services/station.service";
 import * as html2pdf from "html2pdf.js";
+import { AQI_COLORS } from "../../constants/colors";
 @Component({
   template: `
     <div class="badge" [class]="status ? 'badge-success' : 'badge-danger'">
@@ -152,6 +153,14 @@ export class StationComponent implements OnInit {
         this.source.load(this.station.data);
       });
     }
+  }
+
+  public aqiColor(aqi) {
+    const e = AQI_COLORS.find((e) =>
+      aqi > e.gt && e.lte ? aqi <= e.lte : true
+    );
+    if (e) return e.color;
+    return "#FD0100";
   }
 
   ngOnInit(): void {}
