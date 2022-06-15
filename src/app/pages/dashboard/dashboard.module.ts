@@ -17,10 +17,10 @@ import {
 import { NgxEchartsModule } from "ngx-echarts";
 import { ThemeModule } from "../../@theme/theme.module";
 import { DashboardComponent } from "./dashboard.component";
-import { ElectricityChartComponent } from "./electricity/electricity-chart/electricity-chart.component";
-import { ElectricityComponent } from "./electricity/electricity.component";
-import { GeneralChartComponent } from "./electricity/general-chart/general-chart.component";
-import { WeatherComponent } from "./weather/weather.component";
+import { DailyChartComponent } from "./dashboard-chart/daily-chart/daily-chart.component";
+import { ElectricityComponent } from "./dashboard-chart/dashboard-chart.component";
+import { GeneralChartComponent } from "./dashboard-chart/general-chart/general-chart.component";
+import { WeatherComponent } from "./station-info/station-info.component";
 
 @NgModule({
   imports: [
@@ -44,11 +44,11 @@ import { WeatherComponent } from "./weather/weather.component";
   declarations: [
     DashboardComponent,
     ElectricityComponent,
-    ElectricityChartComponent,
+    DailyChartComponent,
     GeneralChartComponent,
     WeatherComponent,
   ],
-  exports: [ElectricityChartComponent, GeneralChartComponent],
+  exports: [DailyChartComponent, GeneralChartComponent],
   providers: [],
 })
 export class DashboardModule {}

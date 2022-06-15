@@ -23,8 +23,8 @@ var itemStyle = {
 };
 
 @Component({
-  selector: "ngx-electricity-chart",
-  styleUrls: ["./electricity-chart.component.scss"],
+  selector: "ngx-daily-chart",
+  styleUrls: ["./daily-chart.component.scss"],
   template: `
     <div
       echarts
@@ -35,7 +35,7 @@ var itemStyle = {
     ></div>
   `,
 })
-export class ElectricityChartComponent implements OnDestroy {
+export class DailyChartComponent implements OnDestroy {
   private alive = true;
 
   @Input() data: StationData[];

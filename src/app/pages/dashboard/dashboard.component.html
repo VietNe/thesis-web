@@ -32,10 +32,12 @@
       </div>
     </nb-card>
     <!-- Station Info - Hour -->
-    <ngx-weather [station]="dashboardData?.station"></ngx-weather>
+    <ngx-station-info [station]="dashboardData?.station"></ngx-station-info>
   </div>
   <!-- Station Info - Today -->
   <div class="col-xxxl-9 col-xxl-8 col-lg-7 col-md-6">
-    <ngx-electricity [station]="dashboardData?.station"></ngx-electricity>
+    <ngx-dashboard-chart
+      [station]="dashboardData?.station"
+    ></ngx-dashboard-chart>
   </div>
 </div>
