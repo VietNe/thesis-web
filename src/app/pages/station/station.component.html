@@ -52,16 +52,26 @@
     </nb-card-body>
   </nb-card>
   <!-- Daily Report -->
-  <nb-card size="large">
+  <nb-card size="large" id="daily-report">
     <nb-card-header>
-      <div>
-        <div class="h4">Daily Report</div>
+      <div class="d-flex align-items-center justify-content-between">
         <div>
-          ID:
-          <b>
-            {{ station?._id }}
-          </b>
+          <div class="h4">Daily Report</div>
+          <div>
+            ID:
+            <b>
+              {{ station?._id }}
+            </b>
+          </div>
         </div>
+        <button
+          nbButton
+          status="success"
+          size="small"
+          (click)="exportDailyPDF()"
+        >
+          Export Report
+        </button>
       </div>
     </nb-card-header>
 
@@ -70,9 +80,21 @@
     </nb-card-body>
   </nb-card>
   <!-- General Report -->
-  <nb-card size="large">
+  <nb-card size="large" id="general-report">
     <nb-card-header>
-      <div class="h4">General Report</div>
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <div class="h4">General Report</div>
+        </div>
+        <button
+          nbButton
+          status="success"
+          size="small"
+          (click)="exportGeneralPDF()"
+        >
+          Export Report
+        </button>
+      </div>
     </nb-card-header>
 
     <nb-card-body>

@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import {
+  NbButtonModule,
   NbCardModule,
   NbIconModule,
   NbInputModule,
@@ -23,6 +24,7 @@ import { StationComponent } from "./station.component";
     NbInputModule,
     ThemeModule,
     Ng2SmartTableModule,
+    NbButtonModule,
     DashboardModule,
   ],
 })

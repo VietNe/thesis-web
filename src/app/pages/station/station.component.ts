@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ViewCell, LocalDataSource } from "ng2-smart-table";
 import { StationService } from "../../services/station.service";
-
+import * as html2pdf from "html2pdf.js";
 @Component({
   template: `
     <div class="badge" [class]="status ? 'badge-success' : 'badge-danger'">
@@ -155,4 +155,18 @@ export class StationComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  public exportDailyPDF(): void {
+    var element = document.getElementById("daily-report");
+    const time = new Date(Date.now()).toDateString();
+    html2pdf(element, { filename: `Daily report ${time}.pdf` });
+  }
+
+  public exportGeneralPDF(): void {
+    const time = new Date(Date.now()).toDateString();
+    var element = document.getElementById("general-report");
+    html2pdf(element, {
+      filename: `General report ${time}.pdf`,
+    });
+  }
 }
