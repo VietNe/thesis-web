@@ -7,11 +7,12 @@ import {
   NbCardModule,
   NbIconModule,
   NbInputModule,
+  NbSelectModule,
   NbTreeGridModule,
 } from "@nebular/theme";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ThemeModule } from "../../@theme/theme.module";
-import { UserFormComponent } from './user-form/user-form.component';
+import { UserFormComponent } from "./user-form/user-form.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ const routes: Routes = [
     NbIconModule,
     NbInputModule,
     NbButtonModule,
+    NbSelectModule,
     ThemeModule,
     Ng2SmartTableModule,
   ],

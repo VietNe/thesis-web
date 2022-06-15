@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { LocalStorageService } from "../../../services/local-storage.service";
+import { StationService } from "../../../services/station.service";
 import { ToastService } from "../../../services/toast.service";
 import { UserService } from "../../../services/user.service";
 
@@ -12,6 +13,7 @@ import { UserService } from "../../../services/user.service";
 export class UserFormComponent implements OnInit {
   @Input() isUpdate = false;
   @Input() user: User;
+  stations: Station[] = [];
 
   public form: FormGroup;
 
@@ -19,7 +21,8 @@ export class UserFormComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private toastService: ToastService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private stationService: StationService
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +48,10 @@ export class UserFormComponent implements OnInit {
     if (this.user && this.isUpdate) {
       this.form.patchValue(this.user);
     }
+
+    this.stationService.getAllStation().subscribe((res) => {
+      this.stations = res.data;
+    });
   }
 
   public updateUser(): void {

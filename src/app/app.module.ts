@@ -1,5 +1,6 @@
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
@@ -9,14 +10,13 @@ import {
   NbSidebarModule,
   NbToastrModule,
 } from "@nebular/theme";
+import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from "ngx-toastr";
 import { CoreModule } from "./@core/core.module";
 import { ThemeModule } from "./@theme/theme.module";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
-import { NgxSpinnerModule } from "ngx-spinner";
 import { interceptors } from "./interceptors";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 @NgModule({
   declarations: [AppComponent],
   imports: [

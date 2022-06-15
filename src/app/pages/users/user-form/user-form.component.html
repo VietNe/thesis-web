@@ -45,14 +45,14 @@
 
               <div class="form-group">
                 <label for="role" class="label">Role</label>
-                <input
-                  type="text"
-                  nbInput
+                <nb-select
                   fullWidth
-                  id="role"
+                  placeholder="Select Role"
                   formControlName="role"
-                  placeholder="Role"
-                />
+                >
+                  <nb-option value="admin">Admin</nb-option>
+                  <nb-option value="user">User</nb-option>
+                </nb-select>
               </div>
             </div>
             <div class="col-12 col-lg-6">
@@ -81,14 +81,17 @@
               </div>
               <div class="form-group">
                 <label for="NameDevice" class="label">Name Device</label>
-                <input
-                  type="text"
-                  nbInput
+                <nb-select
                   fullWidth
-                  id="NameDevice"
+                  placeholder="Select Name Deivce"
                   formControlName="NameDevice"
-                  placeholder="Name Device"
-                />
+                >
+                  <nb-option
+                    *ngFor="let station of stations"
+                    [value]="station.NameDevice"
+                    >{{ station.NameDevice }}</nb-option
+                  >
+                </nb-select>
               </div>
             </div>
           </div>
