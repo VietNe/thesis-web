@@ -40,7 +40,7 @@ pipeline {
                             sh "git config --global user.name VietNe"
                             sh "rm -rf thesis-cd"
                             sh "git clone https://${GITHUB_TOKEN}@github.com/VietNe/thesis-cd.git"
-                            sh "cd ./thesis-cd/web && sed -i 's+nqvietuit/thesis-server.*+nqvietuit/thesis-server:v1.${BUILD_NUMBER}+g' web-deployment.yaml"
+                            sh "cd ./thesis-cd/web && sed -i 's+nqvietuit/thesis-web.*+nqvietuit/thesis-web:v1.${BUILD_NUMBER}+g' web-deployment.yaml"
                             sh "cd ./thesis-cd && git add . && git commit -m 'Update Web Image Version: v1.${BUILD_NUMBER}' && git push https://${GITHUB_TOKEN}@github.com/VietNe/thesis-cd.git HEAD:main"
                         }
                     }
