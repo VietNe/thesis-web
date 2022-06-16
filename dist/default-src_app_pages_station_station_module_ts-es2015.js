@@ -15998,21 +15998,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class StatusComponent {
+class AQIComponent {
     ngOnInit() {
         var _a;
         this.status = (_a = this.rowData) === null || _a === void 0 ? void 0 : _a.status;
     }
+    get aqiColor() {
+        const e = _constants_colors__WEBPACK_IMPORTED_MODULE_1__.AQI_COLORS.find((e) => this.value > e.gt && e.lte ? this.value <= e.lte : true);
+        if (e)
+            return e.color;
+        return "#FD0100";
+    }
 }
-StatusComponent.ɵfac = function StatusComponent_Factory(t) { return new (t || StatusComponent)(); };
-StatusComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: StatusComponent, selectors: [["ng-component"]], inputs: { value: "value", rowData: "rowData" }, decls: 2, vars: 3, consts: [[1, "badge"]], template: function StatusComponent_Template(rf, ctx) { if (rf & 1) {
+AQIComponent.ɵfac = function AQIComponent_Factory(t) { return new (t || AQIComponent)(); };
+AQIComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: AQIComponent, selectors: [["ng-component"]], inputs: { value: "value", rowData: "rowData" }, decls: 2, vars: 3, consts: [[1, "badge"]], template: function AQIComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵclassMap"](ctx.status ? "badge-success" : "badge-danger");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("background-color", ctx.aqiColor);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx.status ? "Active" : "Inactive", " ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx.value, " ");
     } }, encapsulation: 2 });
 class CreatedAtComponent {
     constructor(datePipe) {
@@ -16037,13 +16043,23 @@ class PredictNextHourComponent {
         var _a, _b;
         this.val = (_b = (_a = this.rowData) === null || _a === void 0 ? void 0 : _a.predictNextHour) === null || _b === void 0 ? void 0 : _b.value;
     }
+    get aqiColor() {
+        const e = _constants_colors__WEBPACK_IMPORTED_MODULE_1__.AQI_COLORS.find((e) => this.val > e.gt && e.lte ? this.val <= e.lte : true);
+        if (e)
+            return e.color;
+        return "#FD0100";
+    }
 }
 PredictNextHourComponent.ɵfac = function PredictNextHourComponent_Factory(t) { return new (t || PredictNextHourComponent)(); };
-PredictNextHourComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: PredictNextHourComponent, selectors: [["ng-component"]], inputs: { value: "value", rowData: "rowData" }, decls: 2, vars: 1, template: function PredictNextHourComponent_Template(rf, ctx) { if (rf & 1) {
+PredictNextHourComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: PredictNextHourComponent, selectors: [["ng-component"]], inputs: { value: "value", rowData: "rowData" }, decls: 3, vars: 3, consts: [[1, "badge"]], template: function PredictNextHourComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
     } if (rf & 2) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("background-color", ctx.aqiColor);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx.val, " ");
     } }, encapsulation: 2 });
@@ -16065,7 +16081,8 @@ class StationComponent {
             columns: {
                 AQI: {
                     title: "AQI",
-                    type: "number",
+                    type: "custom",
+                    renderComponent: AQIComponent,
                 },
                 O2: {
                     title: "O2 (ppm)",
@@ -16094,7 +16111,8 @@ class StationComponent {
                 PM25: {
                     filter: false,
                     title: "PM2.5 (µm)",
-                    type: "number",
+                    type: "custom",
+                    renderComponent: AQIComponent,
                 },
                 predictNextHour: {
                     filter: false,
@@ -16116,10 +16134,20 @@ class StationComponent {
             },
         };
         this.source = new ng2_smart_table__WEBPACK_IMPORTED_MODULE_7__.LocalDataSource();
+        this.dailyData = [];
+        this.dailyDate = "";
         const { id } = this.route.snapshot.params;
         if (id) {
             this.stationService.getStationById(id).subscribe((res) => {
                 this.station = res.data;
+                this.station.data = this.station.data.sort((a, b) => new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1);
+                if (this.station.data.length > 0) {
+                    this.dailyDate = this.station.data[0].createdAt;
+                    this.dailyData = this.station.data.filter((elm) => {
+                        return (new Date(elm.createdAt).getDate() ===
+                            new Date(this.dailyDate).getDate());
+                    });
+                }
                 this.source.load(this.station.data);
             });
         }
@@ -16127,6 +16155,13 @@ class StationComponent {
             this.stationService.getStationByNameDevice().subscribe((res) => {
                 this.station = res.data;
                 this.station.data = this.station.data.sort((a, b) => new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1);
+                if (this.station.data.length > 0) {
+                    this.dailyDate = this.station.data[0].createdAt;
+                    this.dailyData = this.station.data.filter((elm) => {
+                        return (new Date(elm.createdAt).getDate() ===
+                            new Date(this.dailyDate).getDate());
+                    });
+                }
                 this.source.load(this.station.data);
             });
         }
@@ -16141,7 +16176,9 @@ class StationComponent {
     exportDailyPDF() {
         var element = document.getElementById("daily-report");
         const time = new Date(Date.now()).toDateString();
-        html2pdf_js__WEBPACK_IMPORTED_MODULE_0__(element, { filename: `Daily report ${time}.pdf` });
+        html2pdf_js__WEBPACK_IMPORTED_MODULE_0__(element, {
+            filename: `Daily report ${time}.pdf`,
+        });
     }
     exportGeneralPDF() {
         const time = new Date(Date.now()).toDateString();
@@ -16152,7 +16189,7 @@ class StationComponent {
     }
 }
 StationComponent.ɵfac = function StationComponent_Factory(t) { return new (t || StationComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_services_station_service__WEBPACK_IMPORTED_MODULE_2__.StationService), _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_8__.ActivatedRoute)); };
-StationComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: StationComponent, selectors: [["ngx-station"]], decls: 54, vars: 25, consts: [[1, "h4"], [1, "badge"], [3, "settings", "source"], ["size", "large", "id", "daily-report"], [1, "d-flex", "align-items-center", "justify-content-between"], ["nbButton", "", "status", "success", "size", "small", 3, "click"], [3, "data"], ["size", "large", "id", "general-report"]], template: function StationComponent_Template(rf, ctx) { if (rf & 1) {
+StationComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineComponent"]({ type: StationComponent, selectors: [["ngx-station"]], decls: 57, vars: 29, consts: [[1, "h4"], [1, "badge"], [3, "settings", "source"], ["size", "large", "id", "daily-report"], [1, "d-flex", "align-items-center", "justify-content-between"], ["nbButton", "", "status", "success", "size", "small", 3, "click"], [3, "data"], ["size", "large", "id", "general-report"]], template: function StationComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](0, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](1, "nb-card");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](2, "nb-card-header");
@@ -16203,41 +16240,45 @@ StationComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5_
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](32, "div", 4);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](33, "div");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](34, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](35, "Daily Report");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](36, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](37, " ID: ");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](38, "b");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](39);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](35, " Daily Report - ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](36, "span");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](37);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipe"](38, "date");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](40, "button", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function StationComponent_Template_button_click_40_listener() { return ctx.exportDailyPDF(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](41, " Export Report ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](39, "div");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](40, " ID: ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](41, "b");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](42);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](42, "nb-card-body");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](43, "ngx-daily-chart", 6);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](44, "nb-card", 7);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](45, "nb-card-header");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](46, "div", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](47, "div");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](48, "div", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](49, "General Report");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](50, "button", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function StationComponent_Template_button_click_50_listener() { return ctx.exportGeneralPDF(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](51, " Export Report ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](43, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function StationComponent_Template_button_click_43_listener() { return ctx.exportDailyPDF(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](44, " Export Report ");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](52, "nb-card-body");
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](53, "ngx-general-chart", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](45, "nb-card-body");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](46, "ngx-daily-chart", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](47, "nb-card", 7);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](48, "nb-card-header");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](49, "div", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](50, "div");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](51, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](52, "General Report");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](53, "button", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵlistener"]("click", function StationComponent_Template_button_click_53_listener() { return ctx.exportGeneralPDF(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtext"](54, " Export Report ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementStart"](55, "nb-card-body");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelement"](56, "ngx-general-chart", 6);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵelementEnd"]();
@@ -16255,17 +16296,19 @@ StationComponent.ɵcmp = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_5_
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](3);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("background-color", ctx.aqiColor(ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].PM25));
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate2"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind2"](22, 19, ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].createdAt, "medium"), " - ", ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].PM25, " (\u00B5m) ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate2"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind2"](22, 20, ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].createdAt, "medium"), " - ", ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].PM25, " (\u00B5m) ");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](4);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵstyleProp"]("background-color", ctx.aqiColor(ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].predictNextHour == null ? null : ctx.station.data[0].predictNextHour.value));
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate2"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind2"](27, 22, ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].predictNextHour == null ? null : ctx.station.data[0].predictNextHour.Date, "medium"), " - ", ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].predictNextHour == null ? null : ctx.station.data[0].predictNextHour.value, " (\u00B5m) ");
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate2"](" ", _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind2"](27, 23, ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].predictNextHour == null ? null : ctx.station.data[0].predictNextHour.Date, "medium"), " - ", ctx.station == null ? null : ctx.station.data[0] == null ? null : ctx.station.data[0].predictNextHour == null ? null : ctx.station.data[0].predictNextHour.value, " (\u00B5m) ");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](3);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("settings", ctx.settings)("source", ctx.source);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](10);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](8);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate"](_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵpipeBind2"](38, 26, ctx.dailyDate, "mediumDate"));
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](5);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵtextInterpolate1"](" ", ctx.station == null ? null : ctx.station._id, " ");
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx.station == null ? null : ctx.station.data);
+        _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx.dailyData);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵadvance"](10);
         _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵproperty"]("data", ctx.station == null ? null : ctx.station.data);
     } }, directives: [_nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbCardComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbCardHeaderComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbCardBodyComponent, ng2_smart_table__WEBPACK_IMPORTED_MODULE_7__.Ng2SmartTableComponent, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbButtonComponent, _dashboard_dashboard_chart_daily_chart_daily_chart_component__WEBPACK_IMPORTED_MODULE_3__.DailyChartComponent, _dashboard_dashboard_chart_general_chart_general_chart_component__WEBPACK_IMPORTED_MODULE_4__.GeneralChartComponent], pipes: [_angular_common__WEBPACK_IMPORTED_MODULE_6__.DatePipe], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzdGF0aW9uLmNvbXBvbmVudC5zY3NzIn0= */"] });

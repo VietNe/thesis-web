@@ -7,12 +7,12 @@ import * as html2pdf from "html2pdf.js";
 import { AQI_COLORS } from "../../constants/colors";
 @Component({
   template: `
-    <div class="badge" [class]="status ? 'badge-success' : 'badge-danger'">
-      {{ status ? "Active" : "Inactive" }}
+    <div class="badge" [style.backgroundColor]="aqiColor">
+      {{ value }}
     </div>
   `,
 })
-class StatusComponent implements ViewCell, OnInit {
+class AQIComponent implements ViewCell, OnInit {
   status: boolean;
 
   @Input() value: string | number;
@@ -20,6 +20,14 @@ class StatusComponent implements ViewCell, OnInit {
 
   ngOnInit() {
     this.status = this.rowData?.status;
+  }
+
+  get aqiColor() {
+    const e = AQI_COLORS.find((e) =>
+      this.value > e.gt && e.lte ? this.value <= e.lte : true
+    );
+    if (e) return e.color;
+    return "#FD0100";
   }
 }
 @Component({
@@ -43,7 +51,9 @@ class CreatedAtComponent implements ViewCell, OnInit {
 @Component({
   template: `
     <div>
-      {{ val }}
+      <div class="badge" [style.backgroundColor]="aqiColor">
+        {{ val }}
+      </div>
     </div>
   `,
 })
@@ -56,6 +66,14 @@ class PredictNextHourComponent implements ViewCell, OnInit {
 
   ngOnInit() {
     this.val = this.rowData?.predictNextHour?.value;
+  }
+
+  get aqiColor() {
+    const e = AQI_COLORS.find((e) =>
+      this.val > e.gt && e.lte ? this.val <= e.lte : true
+    );
+    if (e) return e.color;
+    return "#FD0100";
   }
 }
 
@@ -81,7 +99,8 @@ export class StationComponent implements OnInit {
     columns: {
       AQI: {
         title: "AQI",
-        type: "number",
+        type: "custom",
+        renderComponent: AQIComponent,
       },
       O2: {
         title: "O2 (ppm)",
@@ -111,7 +130,8 @@ export class StationComponent implements OnInit {
       PM25: {
         filter: false,
         title: "PM2.5 (µm)",
-        type: "number",
+        type: "custom",
+        renderComponent: AQIComponent,
       },
       predictNextHour: {
         filter: false,
@@ -134,6 +154,8 @@ export class StationComponent implements OnInit {
   };
 
   source: LocalDataSource = new LocalDataSource();
+  dailyData = [];
+  dailyDate = "";
   constructor(
     private stationService: StationService,
     private route: ActivatedRoute
@@ -142,6 +164,18 @@ export class StationComponent implements OnInit {
     if (id) {
       this.stationService.getStationById(id).subscribe((res) => {
         this.station = res.data;
+        this.station.data = this.station.data.sort((a, b) =>
+          new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1
+        );
+        if (this.station.data.length > 0) {
+          this.dailyDate = this.station.data[0].createdAt;
+          this.dailyData = this.station.data.filter((elm) => {
+            return (
+              new Date(elm.createdAt).getDate() ===
+              new Date(this.dailyDate).getDate()
+            );
+          });
+        }
         this.source.load(this.station.data);
       });
     } else {
@@ -150,6 +184,16 @@ export class StationComponent implements OnInit {
         this.station.data = this.station.data.sort((a, b) =>
           new Date(b.createdAt) > new Date(a.createdAt) ? 1 : -1
         );
+
+        if (this.station.data.length > 0) {
+          this.dailyDate = this.station.data[0].createdAt;
+          this.dailyData = this.station.data.filter((elm) => {
+            return (
+              new Date(elm.createdAt).getDate() ===
+              new Date(this.dailyDate).getDate()
+            );
+          });
+        }
         this.source.load(this.station.data);
       });
     }
@@ -168,7 +212,9 @@ export class StationComponent implements OnInit {
   public exportDailyPDF(): void {
     var element = document.getElementById("daily-report");
     const time = new Date(Date.now()).toDateString();
-    html2pdf(element, { filename: `Daily report ${time}.pdf` });
+    html2pdf(element, {
+      filename: `Daily report ${time}.pdf`,
+    });
   }
 
   public exportGeneralPDF(): void {

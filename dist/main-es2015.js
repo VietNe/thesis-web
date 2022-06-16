@@ -3737,23 +3737,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "BearerInterceptor": function() { return /* binding */ BearerInterceptor; }
 /* harmony export */ });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ 37716);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ 37716);
+/* harmony import */ var _services_local_storage_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/local-storage.service */ 18345);
+
 
 class BearerInterceptor {
-    constructor() {
-        this.token = localStorage.getItem("token");
+    constructor(localStorageService) {
+        this.localStorageService = localStorageService;
+        this.localStorageService.tokenValue.subscribe((val) => {
+            this.token = val;
+        });
     }
     intercept(request, next) {
-        if (!this.token)
-            this.token = localStorage.getItem("token");
+        var _a;
+        this.token = this.localStorageService.token;
         const newReq = request.clone({
-            headers: request.headers.set("Authorization", `Bearer ${this.token}`),
+            headers: request.headers.set("Authorization", "Bearer " + ((_a = this.token) === null || _a === void 0 ? void 0 : _a.slice(1, -1))),
         });
         return next.handle(newReq);
     }
 }
-BearerInterceptor.ɵfac = function BearerInterceptor_Factory(t) { return new (t || BearerInterceptor)(); };
-BearerInterceptor.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: BearerInterceptor, factory: BearerInterceptor.ɵfac });
+BearerInterceptor.ɵfac = function BearerInterceptor_Factory(t) { return new (t || BearerInterceptor)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_services_local_storage_service__WEBPACK_IMPORTED_MODULE_0__.LocalStorageService)); };
+BearerInterceptor.ɵprov = /*@__PURE__*/ _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: BearerInterceptor, factory: BearerInterceptor.ɵfac });
 
 
 /***/ }),
@@ -3843,6 +3848,7 @@ __webpack_require__.r(__webpack_exports__);
 class LocalStorageService {
     constructor() {
         this.userValue = new rxjs__WEBPACK_IMPORTED_MODULE_0__.BehaviorSubject(this.user);
+        this.tokenValue = new rxjs__WEBPACK_IMPORTED_MODULE_0__.BehaviorSubject(this.token);
     }
     set user(value) {
         this.userValue.next(value);
@@ -3850,6 +3856,13 @@ class LocalStorageService {
     }
     get user() {
         return localStorage.getItem("user");
+    }
+    set token(value) {
+        this.userValue.next(value);
+        localStorage.setItem("token", value);
+    }
+    get token() {
+        return localStorage.getItem("token");
     }
 }
 LocalStorageService.ɵfac = function LocalStorageService_Factory(t) { return new (t || LocalStorageService)(); };

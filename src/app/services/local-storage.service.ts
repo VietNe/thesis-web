@@ -6,6 +6,7 @@ import { BehaviorSubject } from "rxjs";
 })
 export class LocalStorageService {
   userValue = new BehaviorSubject(this.user);
+  tokenValue = new BehaviorSubject(this.token);
   constructor() {}
 
   set user(value) {
@@ -15,5 +16,14 @@ export class LocalStorageService {
 
   get user() {
     return localStorage.getItem("user");
+  }
+
+  set token(value) {
+    this.userValue.next(value);
+    localStorage.setItem("token", value);
+  }
+
+  get token() {
+    return localStorage.getItem("token");
   }
 }

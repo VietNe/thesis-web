@@ -75,9 +75,7 @@ export class GeneralChartComponent implements OnDestroy {
         yAxis: {},
         dataZoom: [
           {
-            startValue: new Date(
-              this.data[this.data.length - 1].createdAt
-            ).toLocaleString(),
+            startValue: new Date(this.data[0].createdAt).toLocaleString(),
           },
           {
             type: "inside",

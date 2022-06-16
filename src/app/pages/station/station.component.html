@@ -68,7 +68,9 @@
     <nb-card-header>
       <div class="d-flex align-items-center justify-content-between">
         <div>
-          <div class="h4">Daily Report</div>
+          <div class="h4">
+            Daily Report - <span>{{ dailyDate | date: "mediumDate" }}</span>
+          </div>
           <div>
             ID:
             <b>
@@ -88,7 +90,7 @@
     </nb-card-header>
 
     <nb-card-body>
-      <ngx-daily-chart [data]="station?.data"></ngx-daily-chart>
+      <ngx-daily-chart [data]="dailyData"></ngx-daily-chart>
     </nb-card-body>
   </nb-card>
   <!-- General Report -->

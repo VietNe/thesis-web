@@ -129,11 +129,12 @@
 
             this.authService.login(this.form.value).subscribe(function (res) {
               if (res) {
-                _this.toastService.success("Login successful!");
+                _this.toastService.success("Login successful!"); // localStorage.setItem("token", res.token);
+                // localStorage.setItem("user", JSON.stringify(res.data.user));
 
-                localStorage.setItem("token", res.token); // localStorage.setItem("user", JSON.stringify(res.data.user));
 
                 _this.localStorageService.user = JSON.stringify(res.data.user);
+                _this.localStorageService.token = JSON.stringify(res.token);
 
                 _this.router.navigate(["/pages/dashboard"]);
               }
