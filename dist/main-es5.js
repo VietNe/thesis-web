@@ -7201,7 +7201,7 @@
       var _environment = {
         production: false,
         // API_URL: "http://localhost:8000/api/v1",
-        API_URL: "http://35.186.156.123:30401/api/v1"
+        API_URL: "http://ec2-52-90-250-254.compute-1.amazonaws.com:30401/api/v1"
       };
       /***/
     },
