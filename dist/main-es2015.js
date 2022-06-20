@@ -3894,7 +3894,7 @@ __webpack_require__.r(__webpack_exports__);
 const environment = {
     production: false,
     // API_URL: "http://localhost:8000/api/v1",
-    API_URL: "http://ec2-54-145-1-53.compute-1.amazonaws.com:30401/",
+    API_URL: "http://ec2-54-145-1-53.compute-1.amazonaws.com:30401/api/v1",
 };
 
 
